@@ -1,7 +1,10 @@
 package com.shiger;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -62,12 +65,14 @@ public class Main {
 
     static String urlStr_9 = "http://139.224.37.24:8102/evcard-svm/api/getShopBaseInfoListGZIP";
     static String body9 = "{\n" +
-            "\t\"authId\":\"123456\"\n" +
+            "\t\"authId\":\"123\",\n" +
+            "\t\"updatedTime\":\"20180225143453636\"\n" +
             "}";
 
     static String urlStr_10 = "http://139.224.37.24:8102/evcard-svm/api/getShopRealInfoGzip";
     static String body10 = "{\n" +
-            "\t\"authId\":\"123456\"\n" +
+            "\t\"authId\":\"123456\",\n" +
+            "\t\"shopSeq\":\"156\"\n" +
             "}";
 
     static String urlStr_11 = "http://139.224.37.24:8102/evcard-svm/api/queryVehicleNo";
@@ -99,7 +104,7 @@ public class Main {
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO Auto-generated method stub
         System.out.println("~welcome!~");
 /*
@@ -162,10 +167,31 @@ public class Main {
         HttpUtils.sendEvcardPost(urlStr_9, body9, headersPair);*/
 
         for (int i = 0; i < urlStrArr.length; i++) {
-            System.out.println("\r\n" + "-------- 1." + String.valueOf(i+1) + "-----------");
+            System.out.println("\r\n" + "-------- 1." + String.valueOf(i + 1) + "-----------");
 
             HttpUtils.sendEvcardPost(urlStrArr[i], bodyStrArr[i], headersPair);
         }
+/*
+
+        String data ="H4sIAAAAAAAAAG1Tz08TQRT+X/ZsZLelJXJriCbECoSWcDAepjOP7djZmXV2FqnGRL0AhouJGjQmxEQ4asQYCMH0n3FrOfEvOLMzu90Sb/N97+d8772Hzz2EMcQKcdylEXiLPGXslocIkZAk3qL35/zN+NdZdv46O9zPvn3KDi6udt+OTz+OfxxNjkeTs++NRuP6cm8yysnTn5q5vtz3dIoQOB62IpFy5S36BbFMdFLfNw4S0JIguqZXD/wgmNdcD1GStpGiKjWGelCbb/r+ncIgeOgsQS2o1xcW5pvaRExOXaAHzDjwsAsosgxLQQmh+vcYCnMG95EModKVJdZBpZJbr6AgO1oVgiQxMniGBDxwDRuo21dArGoVYiMBaQkCDBSUpWFHSbQqw2mKLYQh1yN/77gHlYla5YxyqE5kS8i1tMcoznOFEhVJKE9iwIoK3oZtYLmZJnc56jFwYB0SJSlWDnb6Qqp14AVOsJ5+/uOcYDPyB82aFoTpZWgxJKOVNOqZ//kVzrZpmNn51JoLTR0bCQk3Y0uujOVom4Zav1a5efpvQoZuX/yuhjGSg8roDNQ5y/cmGrpNMEjvQVvgQaVoTPFgG/qVDBJCrRslDkQ6zBaWWh09/gHMODuuqCnzpZnNmPRFvMREks9uRcgIMZtxxrAJMGDDqeE+5aQMb4tQbMhK2APE9e3IYlMMtYLyrdOH18peHrUmo8Pry4Ps64fJ75O/J69yuK8vdPzl+Or97vjdKLv47CJXY+D/663gb7a2RrFtZi6NmUBkTpNPl/mWWI7CuQDVazVc828/jsPCX4oYpBrmd2SIDjzR70bTIYVUmpR/7QwTBVF3GMO0okU22u5pqVvpZPnytEqm+IVzpNH02BKFcLkuiZmjLaSRAidEGpPZm3bE9Kaf0dg8Xjz6B6zvQDY6BQAA";
+        byte[] bytes = data.getBytes();
+        byte[] resultByte = GzipUtil.unCompress(bytes);
+        String resultStr = new String(resultByte);
+        System.out.println("resultStr - " + resultStr);
+*/
+
+        String strInput = "abcdefg123";
+        byte[] gzipInput = GzipUtil.compress(strInput.getBytes("UTF-8"));
+        System.out.println("gzipInput - " + Arrays.toString(gzipInput));
+        String gzipStr =  new String(gzipInput);
+        System.out.println("gzipStr - " + gzipStr);
+
+        byte[] gzipStrBytes = gzipStr.getBytes();
+        System.out.println("gzipStrBytes - " + Arrays.toString(gzipStrBytes));
+        byte[] resultByte = GzipUtil.unCompress(gzipStrBytes);
+        String resultStr = new String(resultByte);
+        System.out.println("resultStr - " + resultStr);
+
 
 /*
         "terminalId":"123456",
