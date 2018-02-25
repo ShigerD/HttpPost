@@ -108,7 +108,6 @@ public class Main {
         // TODO Auto-generated method stub
         System.out.println("~welcome!~");
 /*
-
         LoginCSDN loginCSDN = new LoginCSDN();
         List<NameValuePair> nameValuePairs = loginCSDN.getNVPS();
         boolean isSus = loginCSDN.isLoginSus(nameValuePairs);
@@ -183,7 +182,7 @@ public class Main {
         String strInput = "abcdefg123";
         byte[] gzipInput = GzipUtil.compress(strInput.getBytes("UTF-8"));
         System.out.println("gzipInput - " + Arrays.toString(gzipInput));
-        String gzipStr =  new String(gzipInput);
+        String gzipStr = new String(gzipInput);
         System.out.println("gzipStr - " + gzipStr);
 
         byte[] gzipStrBytes = gzipStr.getBytes();
