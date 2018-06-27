@@ -111,6 +111,61 @@ public class HttpUtils {
         return content;
     }
 
+    public static String sendEvcardGet(String urlStr , List<Header> headersPair) {
+        CloseableHttpResponse response = null;
+        String content = null;
+
+        try {
+
+            //　HttpClient中的post请求包装类
+            HttpGet httpGet = new HttpGet(urlStr);
+
+            System.out.println("urlStr = " + urlStr);
+
+//            System.out.println("bodyStr = " + bodyStr);
+            //headersPair
+            System.out.println("headersPair = " + headersPair );
+
+            for (Header header:
+                    headersPair) {
+                httpGet.addHeader(header);
+            }
+
+//            HttpEntity entityIn = new StringEntity(bodyStr);
+//            httpGet.setEntity(entityIn);
+            // 执行请求用execute方法，content用来帮我们附带上额外信息
+            response = httpClient.execute(httpGet, context);
+            // 得到相应实体、包括响应头以及相应内容
+            HttpEntity entity = response.getEntity();
+            // 得到response的内容
+            entity = new BufferedHttpEntity(entity);
+            InputStream result = new BufferedInputStream(entity.getContent());
+            StringBuffer out = new StringBuffer();
+            byte[] b = new byte[4096];
+            for (int n; (n = result.read(b)) != -1;) {
+                out.append(new String(b, 0, n));
+            }
+            content = out.toString();
+            result.close();
+//          EntityUtils.consume(entity);
+            entity = null;
+            System.out.println("\r");
+            System.out.println("sendPost--result = " + content);
+            System.out.println("\r\n"+"\r\n");
+            return content;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (response != null) {
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return content;
+    }
 
     public static String sendEvcardPost(String urlStr, String bodyStr , List<Header> headersPair) {
         CloseableHttpResponse response = null;
