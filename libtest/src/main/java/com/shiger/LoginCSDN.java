@@ -1,5 +1,7 @@
 package com.shiger;
 
+import com.shiger.utils.HttpUtils;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;

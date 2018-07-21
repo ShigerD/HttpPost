@@ -1,4 +1,4 @@
-package com.shiger;
+package com.shiger.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -110,6 +110,54 @@ public class HttpUtils {
         }
         return content;
     }
+
+    public static String sendPost(String url,List<Header> headersPair,
+                                  List<NameValuePair> nvps) {
+        CloseableHttpResponse response = null;
+        String content = null;
+        try {
+            //　HttpClient中的post请求包装类
+            HttpPost post = new HttpPost(url);
+            //
+            for (Header header:
+                    headersPair) {
+                post.addHeader(header);
+            }
+            // nvps是包装请求参数的list
+            if (nvps != null) {
+                post.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
+            }
+            // 执行请求用execute方法，content用来帮我们附带上额外信息
+            response = httpClient.execute(post, context);
+            // 得到相应实体、包括响应头以及相应内容
+            HttpEntity entity = response.getEntity();
+            // 得到response的内容
+            entity = new BufferedHttpEntity(entity);
+            InputStream result = new BufferedInputStream(entity.getContent());
+            StringBuffer out = new StringBuffer();
+            byte[] b = new byte[4096];
+            for (int n; (n = result.read(b)) != -1;) {
+                out.append(new String(b, 0, n));
+            }
+            content = out.toString();
+            result.close();
+//          EntityUtils.consume(entity);
+            entity = null;
+            return content;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (response != null) {
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return content;
+    }
+
 
     public static String sendEvcardGet(String urlStr , List<Header> headersPair) {
         CloseableHttpResponse response = null;

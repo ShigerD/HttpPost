@@ -1,22 +1,21 @@
 package com.shiger;
 
+import com.shiger.utils.EncodeUtils;
+import com.shiger.utils.GzipUtil;
+import com.shiger.utils.HttpUtils;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.Header;
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
 
-public class Main {
+public class EvcardApiTest {
 
 //    private static final String TERMINAL_ID = "EB1805310002";
     private static final String TERMINAL_ID = "EB1805310004";
@@ -128,22 +127,6 @@ public class Main {
     static String[] bodyStrArr = {body1, body2, body3, body4, body5, body6, body7, body8, body9, body10,
             body11, body12, body13};
 
-    private static String bytesToHex(byte[] bytes) {
-        System.out.println("bytes.length - " + bytes.length);
-        StringBuffer hexStr = new StringBuffer();
-        int num;
-        for (int i = 0; i < bytes.length; i++) {
-            num = bytes[i];
-            if (num < 0) {
-                num += 256;
-            }
-            if (num < 16) {
-                hexStr.append("0");
-            }
-            hexStr.append(Integer.toHexString(num));
-        }
-        return hexStr.toString().toLowerCase();
-    }
 
 
     /**
@@ -172,7 +155,7 @@ public class Main {
         String random = "123456";
         String sign = null;
         try {
-            sign = md5Encode(appkey + appsecret + timestamp + random);
+            sign = EncodeUtils.md5Encode(appkey + appsecret + timestamp + random);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -259,46 +242,7 @@ public class Main {
 
     }
 
-    /**
-     * MD5加密 生成32位md5码（小写）
-     *
-     * @return 返回32位md5码
-     */
-    public static String md5Encode(String inStr) throws Exception {
-        MessageDigest md5 = null;
-        try {
-            md5 = MessageDigest.getInstance("MD5");
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            e.printStackTrace();
-            return "";
-        }
-        byte[] byteArray = inStr.getBytes("UTF-8");
-        byte[] md5Bytes = md5.digest(byteArray);
-        StringBuffer hexValue = new StringBuffer();
-        for (int i = 0; i < md5Bytes.length; i++) {
-            int val = ((int) md5Bytes[i]) & 0xff;
-            if (val < 16) {
-                hexValue.append("0");
-            }
-            hexValue.append(Integer.toHexString(val));
-        }
-        return hexValue.toString();
-    }
 
-    //md5
-    private static String MD5Str(String data) {
-        String md5 = "";
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageByte = data.getBytes("UTF-8");
-            byte[] md5Byte = md.digest(messageByte);
-            md5 = bytesToHex(md5Byte);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return md5;
-    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.shiger;
+package com.shiger.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
