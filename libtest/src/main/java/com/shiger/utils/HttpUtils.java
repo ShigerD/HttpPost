@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.List;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.ParseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -128,7 +129,11 @@ public class HttpUtils {
                 post.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
             }
             // 执行请求用execute方法，content用来帮我们附带上额外信息
-            response = httpClient.execute(post, context);
+            try {
+                response = httpClient.execute(post, context);
+            }catch (NoHttpResponseException exception){
+                exception.printStackTrace();
+            }
             // 得到相应实体、包括响应头以及相应内容
             HttpEntity entity = response.getEntity();
             // 得到response的内容
