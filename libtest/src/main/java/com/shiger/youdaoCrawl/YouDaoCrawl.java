@@ -23,6 +23,7 @@ public class YouDaoCrawl {
 
     static String TAG = "YouDaoCrawl";
 
+    static String Fanyi_Youdao_Com_Home = "http://fanyi.youdao.com/";
     //
     static String YouDaoTargetUrl =
             "http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule";
@@ -55,22 +56,36 @@ public class YouDaoCrawl {
         // TODO Auto-generated method stub
         System.out.println("~welcome!~" + TAG);
 
+        String inputMag="hello";
+
+        //getSign
+        YouDaoCrawl youDaoCrawl = new YouDaoCrawl();
+        salt = youDaoCrawl.getYouDaoSalt();
+        sign = youDaoCrawl.getYouDaoSign(inputMag);
+
+        //
+        List<Header> headersPair = youDaoCrawl.getYouDaoHead();
+        //
+        String httpGetYouDao = HttpUtils.sendHttp(Fanyi_Youdao_Com_Home,false);
+        System.out.println("httpGetYouDao ：\r\n" + httpGetYouDao);
+
         while (true){
-  /*          System.out.println("请输入需要翻译的文本：");
+            System.out.println("请输入需要翻译的文本：");
             Scanner in =new Scanner(System.in);
-            String inputMag=in.nextLine();//
-            System.out.println(inputMag);*/
+            inputMag=in.nextLine();//
+            System.out.println(inputMag);
 
-            String inputMag="hello";
 
-            //getSign
-            YouDaoCrawl youDaoCrawl = new YouDaoCrawl();
-            salt = youDaoCrawl.getYouDaoSalt();
-            sign = youDaoCrawl.getYouDaoSign(inputMag);
-            List<Header> headersPair = youDaoCrawl.getYouDaoHead();
+            HttpUtils.sendHttp("http://fanyi.youdao.com/ctlog?pos=&action=MT_BUTTON_CLICK",false);
+            //
             List<NameValuePair> body = youDaoCrawl.getYouDaoBody(inputMag, "en", "zh");
             String youDaoReturn = HttpUtils.sendPost(YouDaoTargetUrl,headersPair, body);
             System.out.println("youReturn ：\r\n" + youDaoReturn);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -134,7 +149,8 @@ public class YouDaoCrawl {
         headersPair.add(new BasicHeader("Connection", "keep-alive"));
         headersPair.add(new BasicHeader("Pragma", "no-cache"));
         headersPair.add(new BasicHeader("Cache-Control", "no-cache"));
-
+        headersPair.add(new BasicHeader("Cookie","YOUDAO_MOBILE_ACCESS_TYPE=1; OUTFOX_SEARCH_USER_ID=-1289760786@10.168.8.76; OUTFOX_SEARCH_USER_ID_NCOO=939708194.3484184; _ntes_nnid=3261dca1448d041f16596bf4942976dd,1524295653112; JSESSIONID=aaaWj8T4yP2lIcfjqeSlw; ___rl__test__cookies="
+                + String.valueOf((new Date()).getTime())));
         /*
 //        Content-Length
 //        207
