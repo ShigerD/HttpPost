@@ -22,8 +22,8 @@ public class TransApi {
     private Map<String, String> buildParams(String query, String from, String to) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("q", query);
-        params.put("from", from);
-        params.put("to", to);
+        params.put("fromAuto", from);
+        params.put("toAuto", to);
 
         params.put("appid", appid);
 

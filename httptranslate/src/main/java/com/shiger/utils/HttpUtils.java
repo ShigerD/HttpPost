@@ -298,7 +298,7 @@ public class HttpUtils {
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
             // application/x-javascript text/xml->xml数据 application/x-javascript->json对象 application/x-www-form-urlencoded->表单数据
-            connection.addRequestProperty("from", "sfzh");  //来源哪个系统
+            connection.addRequestProperty("fromAuto", "sfzh");  //来源哪个系统
             connection.setRequestProperty("user", "user");  //访问申请用户
             InetAddress address = InetAddress.getLocalHost();
             String ip=address.getHostAddress();//获得本机IP
@@ -355,7 +355,7 @@ public class HttpUtils {
             // application/x-javascript text/xml->xml数据 application/x-javascript->json对象 application/x-www-form-urlencoded->表单数据
             // ;charset=utf-8 必须要，不然妙兜那边会出现乱码【★★★★★】
             //addRequestProperty添加相同的key不会覆盖，如果相同，内容会以{name1,name2}
-            connection.addRequestProperty("from", "sfzh");  //来源哪个系统
+            connection.addRequestProperty("fromAuto", "sfzh");  //来源哪个系统
             //setRequestProperty添加相同的key会覆盖value信息
             //setRequestProperty方法，如果key存在，则覆盖；不存在，直接添加。
             //addRequestProperty方法，不管key存在不存在，直接添加。

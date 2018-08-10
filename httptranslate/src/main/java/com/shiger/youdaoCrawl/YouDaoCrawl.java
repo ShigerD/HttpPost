@@ -15,38 +15,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.shiger.youdaoCrawl.YoudaoConstant.*;
+
 /**
  * Created by shiger on 2018/7/21.
  */
 
 public class YouDaoCrawl {
 
-    static String TAG = "YouDaoCrawl";
-
-    static String Fanyi_Youdao_Com_Home = "http://fanyi.youdao.com/";
-    //
-    static String YouDaoTargetUrl =
-            "http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule";
-
-    //head
-    static String User_Agent =
-//            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36";
-            "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0";
-    //body
-    static String action =	"FY_BY_CLICKBUTTION";
-    static String client	= "fanyideskweb";
-    static String doctype	= "json";
-    static String from	= "AUTO";
-    static String i	= "hello friend";
-    static String keyfrom = "fanyi.web";
-    //
-    static String salt	;
-    static String sign	;
-    //
-    static String smartresult	= "dict";
-    static String to	= "AUTO";
-    static String typoResult	= "false";
-    static String version	= "2.1";
+    public static String TAG = "YouDaoCrawl";
 
 
     /**
@@ -56,9 +33,9 @@ public class YouDaoCrawl {
         // TODO Auto-generated method stub
         System.out.println("~welcome!~" + TAG);
 
-        String inputMag="hello";
+        String inputMag = "hello";
 
-        //getSign
+/*        //getSign
         YouDaoCrawl youDaoCrawl = new YouDaoCrawl();
         salt = youDaoCrawl.getYouDaoSalt();
         sign = youDaoCrawl.getYouDaoSign(inputMag);
@@ -68,34 +45,48 @@ public class YouDaoCrawl {
         //
         String httpGetYouDao = HttpUtils.sendHttp(Fanyi_Youdao_Com_Home,false);
         System.out.println("httpGetYouDao ：\r\n" + httpGetYouDao);
+*/
 
-        while (true){
+        while (true) {
             System.out.println("请输入需要翻译的文本：");
-            Scanner in =new Scanner(System.in);
-            inputMag=in.nextLine();//
+            Scanner in = new Scanner(System.in);
+            inputMag = in.nextLine();//
             System.out.println(inputMag);
 
-
+/*
             HttpUtils.sendHttp("http://fanyi.youdao.com/ctlog?pos=&action=MT_BUTTON_CLICK",false);
             //
             List<NameValuePair> body = youDaoCrawl.getYouDaoBody(inputMag, "en", "zh");
             String youDaoReturn = HttpUtils.sendPost(YouDaoTargetUrl,headersPair, body);
             System.out.println("youReturn ：\r\n" + youDaoReturn);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+*/
+            YouDaoCrawl youDaoCrawl = new YouDaoCrawl();
+            youDaoCrawl.youTranslate(inputMag);
         }
-
-
-
     }
 
-    private String getYouDaoSalt(){
+    private String youTranslate(String inputMag) {
+        //getSign
+        YouDaoCrawl youDaoCrawl = new YouDaoCrawl();
+        String salt = youDaoCrawl.getYouDaoSalt();
+        String sign = youDaoCrawl.getYouDaoSign(inputMag, salt);
+        //
+        List<Header> headersPair = youDaoCrawl.getYouDaoHead();
+        System.out.println("headersPair ：\r\n" + headersPair.toString());
+        // 反扒
+//        HttpUtils.sendHttp("http://fanyi.youdao.com/ctlog?pos=&action=MT_BUTTON_CLICK", false);
+        //
+        List<NameValuePair> bodyZh2en = youDaoCrawl.getYouDaoBodyZh2en(inputMag, salt, sign);
+        System.out.println("body ：\r\n" + bodyZh2en.toString());
+        String youDaoReturn = HttpUtils.sendPost(YouDaoTargetUrl, headersPair, bodyZh2en);
+        System.out.println("youReturn ：\r\n" + youDaoReturn);
+        return youDaoReturn;
+    }
+
+    private String getYouDaoSalt() {
         //r = "" + ((new Date).getTime() + parseInt(10 * Math.random(), 10)),
         Date date = new Date();
-        int random =  (int)(1+Math.random()*(10)); //从1到10的int型随数;
+        int random = (int) (1 + Math.random() * (10)); //从1到10的int型随数;
         String salt = String.valueOf(date.getTime() + random);
         System.out.println("~date.getTime()!~" + date.getTime());
         System.out.println("random " + random);
@@ -103,11 +94,11 @@ public class YouDaoCrawl {
         return salt;
     }
 
-    private String getYouDaoSign(String input){
-        String S = "fanyideskweb";
-        String n = i;
+    private String getYouDaoSign(String input, String salt) {
+
         String md5In = "fanyideskweb" + input + salt + "ebSeFb%=XZ%T[KZ)c(sy!";
 //        String md5In = "fanyideskweb" + input + salt + "rY0D^0'nM0}g5Mm1z%1G4";
+        String sign = "";
         try {
             sign = EncodeUtils.md5Encode(md5In);
         } catch (UnsupportedEncodingException e) {
@@ -117,24 +108,8 @@ public class YouDaoCrawl {
         return sign;
     }
 
-    private  List<NameValuePair> getYouDaoBody (String input){
-        List<NameValuePair> body = new ArrayList<NameValuePair>();
-        body.add(new BasicNameValuePair("i", input));
-        body.add(new BasicNameValuePair("from", from));
-        body.add(new BasicNameValuePair("to", to));
-        body.add(new BasicNameValuePair("smartresult", smartresult));
-        body.add(new BasicNameValuePair("client", client));
-        body.add(new BasicNameValuePair("salt", salt));
-        body.add(new BasicNameValuePair("sign", sign));
-        body.add(new BasicNameValuePair("doctype", doctype));
-        body.add(new BasicNameValuePair("keyfrom", keyfrom));
-        body.add(new BasicNameValuePair("action", action));
-        body.add(new BasicNameValuePair("typoResult", typoResult));
-        body.add(new BasicNameValuePair("version", version));
-        return body;
-    }
 
-    private List<Header> getYouDaoHead(){
+    private List<Header> getYouDaoHead() {
         //
         //head
         List<Header> headersPair = new ArrayList<Header>();
@@ -149,17 +124,28 @@ public class YouDaoCrawl {
         headersPair.add(new BasicHeader("Connection", "keep-alive"));
         headersPair.add(new BasicHeader("Pragma", "no-cache"));
         headersPair.add(new BasicHeader("Cache-Control", "no-cache"));
-        headersPair.add(new BasicHeader("Cookie","YOUDAO_MOBILE_ACCESS_TYPE=1; OUTFOX_SEARCH_USER_ID=-1289760786@10.168.8.76; OUTFOX_SEARCH_USER_ID_NCOO=939708194.3484184; _ntes_nnid=3261dca1448d041f16596bf4942976dd,1524295653112; JSESSIONID=aaaWj8T4yP2lIcfjqeSlw; ___rl__test__cookies="
+        headersPair.add(new BasicHeader("Cookie"
+//                , "YOUDAO_MOBILE_ACCESS_TYPE=1; OUTFOX_SEARCH_USER_ID=-1289760786@10.168.8.76; OUTFOX_SEARCH_USER_ID_NCOO=939708194.3484184; _ntes_nnid=3261dca1448d041f16596bf4942976dd,1524295653112; JSESSIONID=aaaWj8T4yP2lIcfjqeSlw; ___rl__test__cookies="
+                , "OUTFOX_SEARCH_USER_ID_NCOO=615567211.0544564; YOUDAO_MOBILE_ACCESS_TYPE=1; OUTFOX_SEARCH_USER_ID=-377961237@10.169.0.83; fanyi-ad-id=47865; fanyi-ad-closed=1; JSESSIONID=aaalmrxz4Tr2Q4uczePtw; ___rl__test__cookies="
                 + String.valueOf((new Date()).getTime())));
-        /*
-//        Content-Length
-//        207
-         */
         return headersPair;
     }
 
-    private  List<NameValuePair> getYouDaoBody (String input, String from, String to){
+    private List<NameValuePair> getYouDaoBodyEn2Zh(String input, String salt, String sign) {
+        List<NameValuePair> body = getYouDaoBody(input, "en", "zh-CHS", salt, sign);
+        return body;
+    }
+
+    private List<NameValuePair> getYouDaoBodyZh2en(String input, String salt, String sign) {
+
+        List<NameValuePair> body = getYouDaoBody(input, "zh-CHS", "en", salt, sign);
+        return body;
+    }
+
+    private List<NameValuePair> getYouDaoBody(String input, String from, String to, String salt, String sign) {
         List<NameValuePair> body = new ArrayList<NameValuePair>();
+//        body.add(new BasicNameValuePair("action", "lan-select"));
+        body.add(new BasicNameValuePair("action", action));
         body.add(new BasicNameValuePair("i", input));
         body.add(new BasicNameValuePair("from", from));
         body.add(new BasicNameValuePair("to", to));
@@ -169,7 +155,6 @@ public class YouDaoCrawl {
         body.add(new BasicNameValuePair("sign", sign));
         body.add(new BasicNameValuePair("doctype", doctype));
         body.add(new BasicNameValuePair("keyfrom", keyfrom));
-        body.add(new BasicNameValuePair("action", action));
         body.add(new BasicNameValuePair("typoResult", typoResult));
         body.add(new BasicNameValuePair("version", version));
         return body;

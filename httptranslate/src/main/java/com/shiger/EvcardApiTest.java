@@ -6,14 +6,13 @@ import com.shiger.utils.HttpUtils;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
+import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
+
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import org.apache.http.Header;
-import org.apache.http.message.BasicHeader;
 
 public class EvcardApiTest {
 
@@ -30,7 +29,7 @@ public class EvcardApiTest {
     //18321277721091339144
     //    private static final String AUTH_ID = "18321277721091339144";
     //18019252932135335553
-    private static final String AUTH_ID = "83839";
+    private static final String AUTH_ID = "17630507746183049905";
 
     static String appkey = "svm_rest";
     static String appsecret = "9e11ab2d-2740-455d-9338-29feb1e87ec4";

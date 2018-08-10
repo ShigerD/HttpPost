@@ -33,8 +33,8 @@ public class BaiduTranslateTools {
 
 /*    private static String getTranslateEn2ZhSign() {
         String inputEnglish = "apple";
-        String from = "en";
-        String to = "zh";
+        String fromAuto = "en";
+        String toAuto = "zh";
         String md5Input = APPID + inputEnglish + Salt + SECRET;
         String sign = "";
         try {
@@ -60,13 +60,13 @@ public class BaiduTranslateTools {
     }
 
 /*    private static String getTranslateEn2ZhUrl() {
-        String targetUrl = API_HTTP_URL + "q=apple&from=en&to=zh&appid="
+        String targetUrl = API_HTTP_URL + "q=apple&fromAuto=en&toAuto=zh&appid="
                 + APPID + "&sign=" + getTranslateEn2ZhSign();
         return targetUrl;
     }*/
 
     private static String getTranslateEn2ZhUrl(String inputEnglish) {
-        String targetUrl = API_HTTP_URL + "q=" + inputEnglish + "&from=en&to=zh&appid="
+        String targetUrl = API_HTTP_URL + "q=" + inputEnglish + "&fromAuto=en&toAuto=zh&appid="
                 + APPID + "&sign=" + getTranslateEn2ZhSign(inputEnglish);
         return targetUrl;
     }

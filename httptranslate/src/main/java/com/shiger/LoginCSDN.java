@@ -17,7 +17,7 @@ import java.util.List;
 
 public class LoginCSDN {
 
-    String LOGIN_URL = "https://passport.csdn.net/account/login;jsessionid=B4A6A0D398CB284EAAB47F704FF3090B.tomcat2?from=http://my.csdn.net/my/mycsdn";
+    String LOGIN_URL = "https://passport.csdn.net/account/login;jsessionid=B4A6A0D398CB284EAAB47F704FF3090B.tomcat2?fromAuto=http://my.csdn.net/my/mycsdn";
     String usr = "602073555@qq.com";
     String psd = "csdn011416";
 
