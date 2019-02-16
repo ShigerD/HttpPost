@@ -2,6 +2,7 @@ package com.shiger.youdaoCrawl;
 
 import com.shiger.utils.EncodeUtils;
 import com.shiger.utils.HttpUtils;
+import com.shiger.utils.Utils;
 
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
@@ -15,7 +16,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import static com.shiger.youdaoCrawl.YoudaoConstant.*;
+import static com.shiger.youdaoCrawl.YoudaoConstant.User_Agent;
+import static com.shiger.youdaoCrawl.YoudaoConstant.YouDaoTargetUrl;
+import static com.shiger.youdaoCrawl.YoudaoConstant.action;
+import static com.shiger.youdaoCrawl.YoudaoConstant.client;
+import static com.shiger.youdaoCrawl.YoudaoConstant.doctype;
+import static com.shiger.youdaoCrawl.YoudaoConstant.keyfrom;
+import static com.shiger.youdaoCrawl.YoudaoConstant.smartresult;
+import static com.shiger.youdaoCrawl.YoudaoConstant.typoResult;
+import static com.shiger.youdaoCrawl.YoudaoConstant.version;
 
 /**
  * Created by shiger on 2018/7/21.
@@ -23,20 +32,19 @@ import static com.shiger.youdaoCrawl.YoudaoConstant.*;
 
 public class YouDaoCrawl {
 
-    public static String TAG = "YouDaoCrawl";
-
+    private static String TAG = Thread.currentThread().getStackTrace()[1].getFileName();
 
     /**
      * @param args
      */
     public static void main(String[] args) throws IOException {
         // TODO Auto-generated method stub
-        System.out.println("~welcome!~" + TAG);
+        Utils.logD(TAG,"~welcome!~" + TAG);
 
         String inputMag = "hello";
 
 /*        //getSign
-        YouDaoCrawl youDaoCrawl = new YouDaoCrawl();
+        TuLinTest youDaoCrawl = new TuLinTest();
         salt = youDaoCrawl.getYouDaoSalt();
         sign = youDaoCrawl.getYouDaoSign(inputMag);
 
@@ -44,21 +52,21 @@ public class YouDaoCrawl {
         List<Header> headersPair = youDaoCrawl.getYouDaoHead();
         //
         String httpGetYouDao = HttpUtils.sendHttp(Fanyi_Youdao_Com_Home,false);
-        System.out.println("httpGetYouDao ：\r\n" + httpGetYouDao);
+        logD(TAG,"httpGetYouDao ：\r\n" + httpGetYouDao);
 */
 
         while (true) {
-            System.out.println("请输入需要翻译的文本：");
+            Utils.logD(TAG,"请输入需要翻译的文本：");
             Scanner in = new Scanner(System.in);
             inputMag = in.nextLine();//
-            System.out.println(inputMag);
+            Utils.logD(TAG,inputMag);
 
 /*
             HttpUtils.sendHttp("http://fanyi.youdao.com/ctlog?pos=&action=MT_BUTTON_CLICK",false);
             //
             List<NameValuePair> body = youDaoCrawl.getYouDaoBody(inputMag, "en", "zh");
             String youDaoReturn = HttpUtils.sendPost(YouDaoTargetUrl,headersPair, body);
-            System.out.println("youReturn ：\r\n" + youDaoReturn);
+            logD(TAG,"youReturn ：\r\n" + youDaoReturn);
 */
             YouDaoCrawl youDaoCrawl = new YouDaoCrawl();
             youDaoCrawl.youTranslate(inputMag);
@@ -72,14 +80,14 @@ public class YouDaoCrawl {
         String sign = youDaoCrawl.getYouDaoSign(inputMag, salt);
         //
         List<Header> headersPair = youDaoCrawl.getYouDaoHead();
-        System.out.println("headersPair ：\r\n" + headersPair.toString());
+        Utils.logD(TAG,"headersPair ：\r\n" + headersPair.toString());
         // 反扒
 //        HttpUtils.sendHttp("http://fanyi.youdao.com/ctlog?pos=&action=MT_BUTTON_CLICK", false);
         //
         List<NameValuePair> bodyZh2en = youDaoCrawl.getYouDaoBodyZh2en(inputMag, salt, sign);
-        System.out.println("body ：\r\n" + bodyZh2en.toString());
+        Utils.logD(TAG,"body ：\r\n" + bodyZh2en.toString());
         String youDaoReturn = HttpUtils.sendPost(YouDaoTargetUrl, headersPair, bodyZh2en);
-        System.out.println("youReturn ：\r\n" + youDaoReturn);
+        Utils.logD(TAG,"youReturn ：\r\n" + youDaoReturn);
         return youDaoReturn;
     }
 
@@ -88,23 +96,23 @@ public class YouDaoCrawl {
         Date date = new Date();
         int random = (int) (1 + Math.random() * (10)); //从1到10的int型随数;
         String salt = String.valueOf(date.getTime() + random);
-        System.out.println("~date.getTime()!~" + date.getTime());
-        System.out.println("random " + random);
-        System.out.println("salt " + salt);
+        Utils.logD(TAG,"~date.getTime()!~" + date.getTime());
+        Utils.logD(TAG,"random " + random);
+        Utils.logD(TAG,"salt " + salt);
         return salt;
     }
 
     private String getYouDaoSign(String input, String salt) {
 
-        String md5In = "fanyideskweb" + input + salt + "ebSeFb%=XZ%T[KZ)c(sy!";
-//        String md5In = "fanyideskweb" + input + salt + "rY0D^0'nM0}g5Mm1z%1G4";
+//        String md5In = "fanyideskweb" + input + salt + "ebSeFb%=XZ%T[KZ)c(sy!";
+        String md5In = "fanyideskweb" + input + salt + "rY0D^0'nM0}g5Mm1z%1G4";
         String sign = "";
         try {
             sign = EncodeUtils.md5Encode(md5In);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        System.out.println("sign " + sign);
+        Utils.logD(TAG,"sign " + sign);
         return sign;
     }
 
@@ -125,8 +133,8 @@ public class YouDaoCrawl {
         headersPair.add(new BasicHeader("Pragma", "no-cache"));
         headersPair.add(new BasicHeader("Cache-Control", "no-cache"));
         headersPair.add(new BasicHeader("Cookie"
-//                , "YOUDAO_MOBILE_ACCESS_TYPE=1; OUTFOX_SEARCH_USER_ID=-1289760786@10.168.8.76; OUTFOX_SEARCH_USER_ID_NCOO=939708194.3484184; _ntes_nnid=3261dca1448d041f16596bf4942976dd,1524295653112; JSESSIONID=aaaWj8T4yP2lIcfjqeSlw; ___rl__test__cookies="
-                , "OUTFOX_SEARCH_USER_ID_NCOO=615567211.0544564; YOUDAO_MOBILE_ACCESS_TYPE=1; OUTFOX_SEARCH_USER_ID=-377961237@10.169.0.83; fanyi-ad-id=47865; fanyi-ad-closed=1; JSESSIONID=aaalmrxz4Tr2Q4uczePtw; ___rl__test__cookies="
+                , "YOUDAO_MOBILE_ACCESS_TYPE=1; OUTFOX_SEARCH_USER_ID=-1289760786@10.168.8.76; OUTFOX_SEARCH_USER_ID_NCOO=939708194.3484184; _ntes_nnid=3261dca1448d041f16596bf4942976dd,1524295653112; JSESSIONID=aaaWj8T4yP2lIcfjqeSlw; ___rl__test__cookies="
+//                , "OUTFOX_SEARCH_USER_ID_NCOO=615567211.0544564; YOUDAO_MOBILE_ACCESS_TYPE=1; OUTFOX_SEARCH_USER_ID=-377961237@10.169.0.83; fanyi-ad-id=47865; fanyi-ad-closed=1; JSESSIONID=aaalmrxz4Tr2Q4uczePtw; ___rl__test__cookies="
                 + String.valueOf((new Date()).getTime())));
         return headersPair;
     }

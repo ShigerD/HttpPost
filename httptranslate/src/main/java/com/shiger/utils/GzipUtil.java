@@ -12,6 +12,7 @@ import java.util.zip.GZIPOutputStream;
  * @author wu yibo
  */
 public class GzipUtil {
+	private static String TAG = Thread.currentThread().getStackTrace()[1].getFileName();
 
 	public static byte[] compress(byte[] bytes) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -61,6 +62,6 @@ public class GzipUtil {
 	public static void main(String[] args) throws IOException {
 		String a = "aaaaaaaaaaa123456789";
 		byte[] zip = compress(a.getBytes());
-		System.out.println(new String(unCompress(zip)));
+		Utils.logD(TAG,new String(unCompress(zip)));
 	}
 }

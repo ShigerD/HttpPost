@@ -2,6 +2,7 @@ package com.shiger;
 
 import com.shiger.utils.EncodeUtils;
 import com.shiger.utils.HttpUtils;
+import com.shiger.utils.Utils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -11,6 +12,9 @@ import java.io.UnsupportedEncodingException;
  */
 
 public class BaiduTranslateTools {
+
+    private static String TAG = Thread.currentThread().getStackTrace()[1].getFileName();
+
 
     /*
         appid=2015063000000001
@@ -76,15 +80,17 @@ public class BaiduTranslateTools {
      */
     public static void main(String[] args) throws IOException {
         // TODO Auto-generated method stub
-        System.out.println("~welcome!~");
+        Utils.logD(TAG,"~welcome!~");
 
         String testStr = "hello";
-        System.out.println("sign: " + getTranslateEn2ZhSign(testStr));
-        System.out.println("targetUrl: " + getTranslateEn2ZhUrl(testStr));
+        Utils.logD(TAG,"sign: " + getTranslateEn2ZhSign(testStr));
+        Utils.logD(TAG,"targetUrl: " + getTranslateEn2ZhUrl(testStr));
 
         String result = HttpUtils.sendHttp(getTranslateEn2ZhUrl(testStr),false);
-        System.out.println("result: " + result);
+        Utils.logD(TAG,"result: " + result);
 
 
     }
+
+
 }

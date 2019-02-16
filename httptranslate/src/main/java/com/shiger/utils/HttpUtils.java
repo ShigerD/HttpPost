@@ -1,5 +1,20 @@
 package com.shiger.utils;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.NoHttpResponseException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -8,26 +23,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import org.apache.http.Header;
-import org.apache.http.HeaderElement;
-import org.apache.http.NoHttpResponseException;
-import org.apache.http.ParseException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.message.BasicHeader;
+
+import static com.shiger.utils.Utils.TAG;
+
 
 public class HttpUtils {
 
@@ -62,7 +62,7 @@ public class HttpUtils {
             }
             content = out.toString();
             result.close();
-//            System.out.println(content);
+//            logD(TAG,content);
             entity = null;
             return content;
         } catch (Exception e) {
@@ -173,11 +173,11 @@ public class HttpUtils {
             //　HttpClient中的post请求包装类
             HttpGet httpGet = new HttpGet(urlStr);
 
-            System.out.println("urlStr = " + urlStr);
+            Utils.logD(TAG,"urlStr = " + urlStr);
 
-//            System.out.println("bodyStr = " + bodyStr);
+//            logD(TAG,"bodyStr = " + bodyStr);
             //headersPair
-            System.out.println("headersPair = " + headersPair );
+            Utils.logD(TAG,"headersPair = " + headersPair );
 
             for (Header header:
                     headersPair) {
@@ -202,9 +202,9 @@ public class HttpUtils {
             result.close();
 //          EntityUtils.consume(entity);
             entity = null;
-            System.out.println("\r");
-            System.out.println("sendPost--result = " + content);
-            System.out.println("\r\n"+"\r\n");
+            Utils.logD(TAG,"\r");
+            Utils.logD(TAG,"sendPost--result = " + content);
+            Utils.logD(TAG,"\r\n"+"\r\n");
             return content;
         } catch (Exception e) {
             e.printStackTrace();
@@ -229,22 +229,18 @@ public class HttpUtils {
                //　HttpClient中的post请求包装类
                 HttpPost post = new HttpPost(urlStr);
 
-                System.out.println("urlStr = " + urlStr);
+                Utils.logD(TAG,"urlStr = " + urlStr);
 
-                System.out.println("bodyStr = " + bodyStr);
+                Utils.logD(TAG,"bodyStr = " + bodyStr);
                        //headersPair
-                System.out.println("headersPair = " + headersPair );
+                Utils.logD(TAG,"headersPair = " + headersPair );
 
              for (Header header:
                  headersPair) {
                 post.addHeader(header);
             }
-//            System.out.println("header = " + header);
 
-               /*
-            Header header = new BasicHeader("Content-Type","application/json");
-            post.addHeader(header);
-    */
+
 //            post.addHeader("Content-Type","application/json");
             HttpEntity entityIn = new StringEntity(bodyStr);
             post.setEntity(entityIn);
@@ -264,9 +260,9 @@ public class HttpUtils {
             result.close();
 //          EntityUtils.consume(entity);
             entity = null;
-            System.out.println("\r");
-            System.out.println("sendPost--result = " + content);
-            System.out.println("\r\n"+"\r\n");
+            Utils.logD(TAG,"\r");
+            Utils.logD(TAG,"sendPost--result = " + content);
+            Utils.logD(TAG,"\r\n"+"\r\n");
             return content;
         } catch (Exception e) {
             e.printStackTrace();
@@ -309,11 +305,11 @@ public class HttpUtils {
             connection.connect();
             DataOutputStream dataout = new DataOutputStream(connection.getOutputStream());
             String parm ="username=zhagnsan&password=0000";
-            System.out.println("传递参数："+parm);
+            Utils.logD(TAG,"传递参数："+parm);
             dataout.writeBytes(parm);
             dataout.flush();
             dataout.close(); // 重要且易忽略步骤 (关闭流,切记!)
-            System.out.println(connection.getResponseCode());
+            Utils.logD(TAG,connection.getResponseCode());
             // 连接发起请求,处理服务器响应  (从连接获取到输入流并包装为bufferedReader)
             BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
             String line;
@@ -324,7 +320,7 @@ public class HttpUtils {
             }
             bf.close();    // 重要且易忽略步骤 (关闭流,切记!)
             connection.disconnect(); // 销毁连接
-            System.out.println(sb.toString());
+            Utils.logD(TAG,sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -371,13 +367,13 @@ public class HttpUtils {
             DataOutputStream dataout = new DataOutputStream(connection.getOutputStream());
             // 格式 parm = aaa=111&bbb=222&ccc=333&ddd=444
             String parm ="username=zhagnsan&password=0000";
-            System.out.println("传递参数："+parm);
+            Utils.logD(TAG,"传递参数："+parm);
             // 将参数输出到连接
             dataout.writeBytes(parm);
             // 输出完成后刷新并关闭流
             dataout.flush();
             dataout.close(); // 重要且易忽略步骤 (关闭流,切记!)
-            //System.out.println(connection.getResponseCode());
+            //logD(TAG,connection.getResponseCode());
             // 连接发起请求,处理服务器响应  (从连接获取到输入流并包装为bufferedReader)
             BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
             String line;
@@ -390,7 +386,7 @@ public class HttpUtils {
             }
             bf.close();    // 重要且易忽略步骤 (关闭流,切记!)
             connection.disconnect(); // 销毁连接
-            System.out.println(sb.toString());
+            Utils.logD(TAG,sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

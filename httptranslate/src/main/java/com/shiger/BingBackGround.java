@@ -1,6 +1,7 @@
 package com.shiger;
 
 import com.shiger.utils.HttpUtils;
+import com.shiger.utils.Utils;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -11,6 +12,7 @@ import java.util.regex.Pattern;
  */
 
 public class BingBackGround {
+    private static String TAG = Thread.currentThread().getStackTrace()[1].getFileName();
 
     private String Bing_International_Home = "https://cn.bing.com/?FORM=BEHPTB&ensearch=1";
     private String Bing_National_Home = "https://cn.bing.com/?FORM=BEHPTB";
@@ -20,16 +22,16 @@ public class BingBackGround {
      */
     public static void main(String[] args) throws IOException {
         // TODO Auto-generated method stub
-        System.out.println("~welcome!~");
+        Utils.logD(TAG,"~welcome!~");
 
         BingBackGround bingBackGround = new BingBackGround();
         //
         String bingNationalHtml = HttpUtils.sendHttp(bingBackGround.Bing_National_Home, false);
-//        System.out.println("bingHome------\n" + bingNationalHtml);
+//        logD(TAG,"bingHome------\n" + bingNationalHtml);
         bingBackGround.getBingInterntionalBgUrl(bingNationalHtml);
         //
         String bingInternationalHtml = HttpUtils.sendHttp(bingBackGround.Bing_International_Home, false);
-//        System.out.println("bingHome------\n" + bingInternationalHtml);
+//        logD(TAG,"bingHome------\n" + bingInternationalHtml);
         bingBackGround.getBingInterntionalBgUrl(bingInternationalHtml);
 
 
@@ -46,13 +48,13 @@ public class BingBackGround {
         Matcher matcher = pattern.matcher(bingHtml);
         if (matcher.find()) {
             result = matcher.group(1);
-            System.out.println("group(0) >>>  " + result);
-            System.out.println("group(1) >>>  " + matcher.group(1));
+            Utils.logD(TAG,"group(0) >>>  " + result);
+            Utils.logD(TAG,"group(1) >>>  " + matcher.group(1));
             result = result.replaceAll("\"", "");
             result = "https://cn.bing.com" + result.trim();
-            System.out.println("result >>>  " + result);
+            Utils.logD(TAG,"result >>>  " + result);
         } else {
-            System.out.println("NO MATCH");
+            Utils.logD(TAG,"NO MATCH");
         }
         return result;
     }

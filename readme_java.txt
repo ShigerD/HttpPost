@@ -40,7 +40,7 @@ result = HttpUtils.sendEvcardPost(urlStr_1,body1, headersPair);
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (Exception e) {
-            System.out.println(e.toString());
+            logD(TAG,e.toString());
             e.printStackTrace();
             return "";
         }
@@ -58,7 +58,7 @@ result = HttpUtils.sendEvcardPost(urlStr_1,body1, headersPair);
     }
 
     private static String bytesToHex(byte[] bytes) {
-        System.out.println("bytes.length - " + bytes.length );
+        logD(TAG,"bytes.length - " + bytes.length );
         StringBuffer hexStr = new StringBuffer();
         int num;
         for (int i = 0; i < bytes.length; i++) {

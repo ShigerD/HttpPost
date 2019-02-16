@@ -1,5 +1,7 @@
 package com.shiger.baiduTrans;
 
+import com.shiger.utils.Utils;
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
@@ -22,6 +24,9 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 class HttpGet {
+
+    private static String TAG = Thread.currentThread().getStackTrace()[1].getFileName();
+
     protected static final int SOCKET_TIMEOUT = 10000; // 10S
     protected static final String GET = "GET";
 
@@ -33,7 +38,7 @@ class HttpGet {
 
             String sendUrl = getUrlWithQueryString(host, params);
 
-            // System.out.println("URL:" + sendUrl);
+            // logD(TAG,"URL:" + sendUrl);
 
             URL uri = new URL(sendUrl); // 创建URL对象
             HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
@@ -44,7 +49,7 @@ class HttpGet {
             conn.setRequestMethod(GET);
             int statusCode = conn.getResponseCode();
             if (statusCode != HttpURLConnection.HTTP_OK) {
-                System.out.println("Http错误码：" + statusCode);
+                Utils.logD(TAG,"Http错误码：" + statusCode);
             }
 
             // 读取服务器的数据

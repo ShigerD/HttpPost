@@ -8,6 +8,7 @@ import java.security.MessageDigest;
  */
 
 public class EncodeUtils {
+    private static String TAG = Thread.currentThread().getStackTrace()[1].getFileName();
 
     /**
      * MD5加密 生成32位md5码（小写）
@@ -19,7 +20,7 @@ public class EncodeUtils {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (Exception e) {
-            System.out.println(e.toString());
+            Utils.logD(TAG,e.toString());
             e.printStackTrace();
             return "";
         }
@@ -52,7 +53,7 @@ public class EncodeUtils {
 
 
     private static String bytesToHex(byte[] bytes) {
-        System.out.println("bytes.length - " + bytes.length);
+        Utils.logD(TAG,"bytes.length - " + bytes.length);
         StringBuffer hexStr = new StringBuffer();
         int num;
         for (int i = 0; i < bytes.length; i++) {

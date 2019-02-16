@@ -1,9 +1,13 @@
 package com.shiger.baiduTrans;
 
+import com.shiger.utils.Utils;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class TransApi {
+    private static String TAG = Thread.currentThread().getStackTrace()[1].getFileName();
+
     private static final String TRANS_API_HOST = "http://api.fanyi.baidu.com/api/trans/vip/translate";
 
     private String appid;
@@ -36,7 +40,7 @@ public class TransApi {
         String src = appid + query + salt + securityKey; // 加密前的原文
 
         params.put("sign", MD5.md5(src));
-        System.out.println("sign:" + MD5.md5(src) + "\n");
+        Utils.logD(TAG,"sign:" + MD5.md5(src) + "\n");
         return params;
     }
 

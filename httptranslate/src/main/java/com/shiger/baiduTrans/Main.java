@@ -1,7 +1,10 @@
 package com.shiger.baiduTrans;
 
 
+import com.shiger.utils.Utils;
+
 public class Main {
+    private static String TAG = Thread.currentThread().getStackTrace()[1].getFileName();
 
     // 在平台申请的APP_ID 详见 http://api.fanyi.baidu.com/api/trans/product/desktop?req=developer
     private static final String APP_ID = "";
@@ -15,14 +18,14 @@ public class Main {
         TransApi api = new TransApi(APPID, SECRET);
 
         String query = "高度600米";
-        System.out.println(api.getTransResult(query, "auto", "en"));
+        Utils.logD(TAG,api.getTransResult(query, "auto", "en"));
 
 
 
         //
         String strSrcEn = "hello";
         String strZh =  api.getTransResult(strSrcEn, "en", "zh");
-        System.out.println(strZh);
+        Utils.logD(TAG,strZh);
     }
 
 
