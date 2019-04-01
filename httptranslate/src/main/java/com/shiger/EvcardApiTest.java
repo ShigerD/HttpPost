@@ -156,8 +156,8 @@ public class EvcardApiTest {
 
 //        String timestamp = Calendar.getInstance().getTimeInMillis() + "";
 
-//        String url = "http://www.baidu.com";  //北京时间
-        String timestamp = TimeUtils.getTimestampFromUrl("http://explo.club");
+        String url = "http://www.baidu.com";  //北京时间
+        String timestamp = TimeUtils.getTimestampFromUrl(url);
 //        timestamp = "1536914457000";//1536913604000
         String random = "123456";
         String sign = null;

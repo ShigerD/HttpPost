@@ -21,8 +21,37 @@ public class MainTest {
         String getStackTrace = Thread.currentThread().getStackTrace()[1].getFileName();
         Utils.logD(TAG, getStackTrace);
 
+        UserTest userTest1 = new UserTest().setName("a").setNumber("a");
+        UserTest userTest2 = new UserTest().setName("a").setNumber("a");
+        boolean b = userTest1.equals(userTest2);
+
+        Utils.logD(TAG, "b >>" + b);
+
     }
 
+
+    public static class UserTest{
+        String name;
+        String number;
+
+        public String getName() {
+            return name;
+        }
+
+        public UserTest setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public String getNumber() {
+            return number;
+        }
+
+        public UserTest setNumber(String number) {
+            this.number = number;
+            return this;
+        }
+    }
 
 
 }

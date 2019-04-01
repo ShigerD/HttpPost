@@ -261,7 +261,7 @@ public class HttpUtils {
 //          EntityUtils.consume(entity);
             entity = null;
             Utils.logD(TAG,"\r");
-            Utils.logD(TAG,"sendPost--result = " + content);
+            Utils.logD(TAG,"sendPost--response = " + content);
             Utils.logD(TAG,"\r\n"+"\r\n");
             return content;
         } catch (Exception e) {
