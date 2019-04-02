@@ -249,6 +249,7 @@ Body示例
         Utils.logD(TAG, "Content-Type  - " + type);
 
         List<Header> headersPair = new ArrayList<Header>();
+
         headersPair.add(new BasicHeader("appkey", appkey));
         headersPair.add(new BasicHeader("timestamp", timestamp));
         headersPair.add(new BasicHeader("random", random));
